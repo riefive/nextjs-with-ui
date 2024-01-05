@@ -1,7 +1,9 @@
 'use client';
 
+import { useState } from 'react';
 import { Button } from '@nextui-org/button';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue } from '@nextui-org/table';
+import { Pagination } from '@nextui-org/pagination';
 import { Listbox, ListboxItem } from '@nextui-org/listbox'; 
 import { Input } from '@nextui-org/input';
 import { NavbarUi } from '@/components/commons/NavbarUi';
@@ -17,6 +19,7 @@ export const ListboxWrapper = ({ children }: { children: React.ReactNode }) => (
 export default function Home() {
   const columns = [...columnsOfEmployees];
   const rows = [...rowsOfEmployees];
+  const [currentPage, setCurrentPage] = useState(1);
 
   return (
     <main>
@@ -62,6 +65,17 @@ export default function Home() {
             )}
           </TableBody>
         </Table>
+        <div className="flex justify-end">
+          <Pagination 
+            isCompact 
+            showControls 
+            showShadow 
+            total={10} 
+            initialPage={1} 
+            page={currentPage}
+            onChange={setCurrentPage}
+          />
+        </div>
 
         <ListboxWrapper>
             <Listbox
