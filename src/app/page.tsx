@@ -1,6 +1,7 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useRef, useState } from 'react';
+import dynamic from 'next/dynamic';
 import { Button } from '@nextui-org/button';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue } from '@nextui-org/table';
 import { Pagination } from '@nextui-org/pagination';
@@ -17,6 +18,8 @@ import { columnsOfEmployees, columnsOfUsers, rowsOfEmployees, rowsOfUsers } from
 import { HiEye } from 'react-icons/hi2';
 import { HiMiniPencilSquare } from 'react-icons/hi2';
 import { HiMiniTrash } from 'react-icons/hi2';
+
+const DownloadPDF = dynamic(() => import('../components/commons/DownloadPdf'),{ ssr:false });
 
 interface UserType {
   id: number
@@ -48,7 +51,7 @@ const statusColorMap: ColorType = {
   vacation: "warning",
 };
 
-const renderCell = (user: any, columnKey: any) => {
+const renderCell = (user: any | UserType, columnKey: any) => {
   const cellValue = user[columnKey];
 
   switch (columnKey) {
@@ -108,6 +111,7 @@ export default function Home() {
   const rowsUsers = [...rowsOfUsers];
   const [currentPage, setCurrentPage] = useState(1);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const anchorEl = useRef<HTMLDivElement>(null);
 
   return (
     <main>
@@ -158,13 +162,13 @@ export default function Home() {
         </Table>
         <Table aria-label="Example table with dynamic content">
           <TableHeader>
-            {columnsUsers.map((column) =>
-              <TableColumn key={column.uid}>{column.name}</TableColumn>
+            {columns.map((column) =>
+              <TableColumn key={column.key}>{column.label}</TableColumn>
             )}
           </TableHeader>
           <TableBody>
-            {rowsUsers.map((row) =>
-              <TableRow key={row.id}>
+            {rows.map((row) =>
+              <TableRow key={row.key}>
                 {(columnKey) => <TableCell>{getKeyValue(row, columnKey)}</TableCell>}
               </TableRow>
             )}
@@ -204,6 +208,20 @@ export default function Home() {
           className="max-w-xs"
         />
         <Button className="w-[200px]">Click me</Button>
+        <div>
+          <div className="content mt-10" ref={anchorEl}>
+            <h1>Hello PDF</h1>
+            <p id="text">
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quisquam animi, molestiae quaerat assumenda neque culpa ab aliquam facilis eos nesciunt! Voluptatibus eligendi vero amet dolorem omnis provident beatae nihil earum!
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ea, est. Magni animi fugit voluptates mollitia officia libero in. Voluptatibus nisi assumenda accusamus deserunt sunt quidem in, ab perspiciatis ad rem.
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil accusantium reprehenderit, quasi dolorum deserunt, nisi dolores quae officiis odio vel natus! Pariatur enim culpa velit consequatur sapiente natus dicta alias!
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur, asperiores error laudantium corporis sunt earum incidunt expedita quo quidem delectus fugiat facilis quia impedit sit magni quibusdam ipsam reiciendis quaerat!
+            </p>
+          </div>
+          <br />
+          <DownloadPDF />
+          <div className="h-[100px]" />
+        </div>
       </div> 
       <ModalSample isOpen={isOpen} onOpenChange={onOpenChange} />
     </main>
