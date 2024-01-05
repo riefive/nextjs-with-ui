@@ -1,10 +1,12 @@
 'use client';
 
 import { Button } from '@nextui-org/button';
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue } from '@nextui-org/table';
 import { Listbox, ListboxItem } from '@nextui-org/listbox'; 
 import { Input } from '@nextui-org/input';
 import { NavbarUi } from '@/components/commons/NavbarUi';
 import { ThemeSwitcher } from '@/components/commons/ThemeSwitcher';
+import { columnsOfEmployees, rowsOfEmployees } from '@/utils/dummy';
 
 export const ListboxWrapper = ({ children }: { children: React.ReactNode }) => (
   <div className="w-full max-w-[260px] border-small px-1 py-2 rounded-small border-default-200 dark:border-default-100">
@@ -13,6 +15,9 @@ export const ListboxWrapper = ({ children }: { children: React.ReactNode }) => (
 );
 
 export default function Home() {
+  const columns = [...columnsOfEmployees];
+  const rows = [...rowsOfEmployees];
+
   return (
     <main>
       <NavbarUi />
@@ -45,6 +50,19 @@ export default function Home() {
         </p>
       </div>
       <div className="flex flex-col gap-4 p-10">
+        <Table aria-label="Example table with dynamic content">
+          <TableHeader columns={columns}>
+            {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
+          </TableHeader>
+          <TableBody items={rows} emptyContent={"No rows to display."}>
+            {(item) => (
+              <TableRow key={item.key}>
+                {(columnKey) => <TableCell>{getKeyValue(item, columnKey)}</TableCell>}
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+
         <ListboxWrapper>
             <Listbox
               aria-label="Actions"
