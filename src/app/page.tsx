@@ -4,6 +4,7 @@ import { Button } from '@nextui-org/button';
 import { Listbox, ListboxItem } from '@nextui-org/listbox'; 
 import { Input } from '@nextui-org/input';
 import { NavbarUi } from '@/components/commons/NavbarUi';
+import { ThemeSwitcher } from '@/components/commons/ThemeSwitcher';
 
 export const ListboxWrapper = ({ children }: { children: React.ReactNode }) => (
   <div className="w-full max-w-[260px] border-small px-1 py-2 rounded-small border-default-200 dark:border-default-100">
@@ -16,6 +17,9 @@ export default function Home() {
     <main>
       <NavbarUi />
       <div className="px-6 flex gap-4 flex-col pb-16 flex-grow">
+        <div className="flex justify-end">
+          <ThemeSwitcher />
+        </div>
         Test Hello World
         <h1 className="text-xl font-medium">Lorem ipsum dolor sit amet</h1>
         <p>
