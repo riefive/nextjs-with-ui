@@ -1,16 +1,40 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Button } from '@nextui-org/button';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue } from '@nextui-org/table';
 import { Pagination } from '@nextui-org/pagination';
-import { Listbox, ListboxItem } from '@nextui-org/listbox'; 
+import { Listbox, ListboxItem } from '@nextui-org/listbox';
+import { Chip } from '@nextui-org/chip';
+import { Tooltip } from '@nextui-org/tooltip';  
+import { User } from '@nextui-org/user'; 
 import { Input } from '@nextui-org/input';
 import { useDisclosure } from '@nextui-org/react';
 import { NavbarUi } from '@/components/commons/NavbarUi';
 import { ThemeSwitcher } from '@/components/commons/ThemeSwitcher';
 import { ModalSample } from '@/components/commons/ModalSample';
-import { columnsOfEmployees, rowsOfEmployees } from '@/utils/dummy';
+import { columnsOfEmployees, columnsOfUsers, rowsOfEmployees, rowsOfUsers } from '@/utils/dummy';
+import { HiEye } from 'react-icons/hi2';
+import { HiMiniPencilSquare } from 'react-icons/hi2';
+import { HiMiniTrash } from 'react-icons/hi2';
+
+interface UserType {
+  id: number
+  name: string
+  role?: string
+  team?: string
+  status: string
+  age: number
+  email: string
+  [x: string]: unknown | undefined | any
+};
+
+interface ColorType {
+  active: string
+  paused: string
+  vacation: string
+  [x: string]: unknown | undefined | any
+}
 
 export const ListboxWrapper = ({ children }: { children: React.ReactNode }) => (
   <div className="w-full max-w-[260px] border-small px-1 py-2 rounded-small border-default-200 dark:border-default-100">
@@ -18,9 +42,70 @@ export const ListboxWrapper = ({ children }: { children: React.ReactNode }) => (
   </div>
 );
 
+const statusColorMap: ColorType = {
+  active: "success",
+  paused: "danger",
+  vacation: "warning",
+};
+
+const renderCell = (user: any, columnKey: any) => {
+  const cellValue = user[columnKey];
+
+  switch (columnKey) {
+    case "name":
+      const avatarUrl = 'https://ui-avatars.com/api/?name='
+      return (
+        <User
+          avatarProps={{radius: "lg", src: avatarUrl + encodeURIComponent(user.name) }}
+          description={user.email}
+          name={cellValue}
+        >
+          {user.email}
+        </User>
+      );
+    case "role":
+      return (
+        <div className="flex flex-col">
+          <p className="text-bold text-sm capitalize">{cellValue}</p>
+          <p className="text-bold text-sm capitalize text-default-400">{user.team}</p>
+        </div>
+      );
+    case "status":
+      return (
+        <Chip className="capitalize" color={statusColorMap[user.status]} size="sm" variant="flat">
+          {cellValue}
+        </Chip>
+      );
+    case "actions":
+      return (
+        <div className="relative flex items-center gap-2">
+          <Tooltip content="Details">
+            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <HiEye />
+            </span>
+          </Tooltip>
+          <Tooltip content="Edit user">
+            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <HiMiniPencilSquare />
+            </span>
+          </Tooltip>
+          <Tooltip color="danger" content="Delete user">
+            <span className="text-lg text-danger cursor-pointer active:opacity-50">
+              <HiMiniTrash />
+            </span>
+          </Tooltip>
+        </div>
+      );
+    default:
+      return cellValue;
+  }
+};
+
 export default function Home() {
   const columns = [...columnsOfEmployees];
   const rows = [...rowsOfEmployees];
+  const columnsUsers = [...columnsOfUsers];
+  const rowsUsers = [...rowsOfUsers];
   const [currentPage, setCurrentPage] = useState(1);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -55,14 +140,32 @@ export default function Home() {
         </p>
       </div>
       <div className="flex flex-col gap-4 p-10">
-        <Table aria-label="Example table with dynamic content">
-          <TableHeader columns={columns}>
-            {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
+        <Table selectionMode="multiple" defaultSelectedKeys={["2", "4"]} aria-label="Example table with custom cells">
+          <TableHeader columns={columnsUsers}>
+            {(column) => (
+              <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>
+                {column.name}
+              </TableColumn>
+            )}
           </TableHeader>
-          <TableBody items={rows} emptyContent={"No rows to display."}>
+          <TableBody items={rowsUsers}>
             {(item) => (
-              <TableRow key={item.key}>
-                {(columnKey) => <TableCell>{getKeyValue(item, columnKey)}</TableCell>}
+              <TableRow key={item.id}>
+                {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+        <Table aria-label="Example table with dynamic content">
+          <TableHeader>
+            {columnsUsers.map((column) =>
+              <TableColumn key={column.uid}>{column.name}</TableColumn>
+            )}
+          </TableHeader>
+          <TableBody>
+            {rowsUsers.map((row) =>
+              <TableRow key={row.id}>
+                {(columnKey) => <TableCell>{getKeyValue(row, columnKey)}</TableCell>}
               </TableRow>
             )}
           </TableBody>
