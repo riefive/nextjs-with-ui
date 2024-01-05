@@ -6,8 +6,10 @@ import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKey
 import { Pagination } from '@nextui-org/pagination';
 import { Listbox, ListboxItem } from '@nextui-org/listbox'; 
 import { Input } from '@nextui-org/input';
+import { useDisclosure } from '@nextui-org/react';
 import { NavbarUi } from '@/components/commons/NavbarUi';
 import { ThemeSwitcher } from '@/components/commons/ThemeSwitcher';
+import { ModalSample } from '@/components/commons/ModalSample';
 import { columnsOfEmployees, rowsOfEmployees } from '@/utils/dummy';
 
 export const ListboxWrapper = ({ children }: { children: React.ReactNode }) => (
@@ -20,6 +22,7 @@ export default function Home() {
   const columns = [...columnsOfEmployees];
   const rows = [...rowsOfEmployees];
   const [currentPage, setCurrentPage] = useState(1);
+  const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
 
   return (
     <main>
@@ -67,7 +70,7 @@ export default function Home() {
         </Table>
         <div className="flex justify-end">
           <Pagination 
-            isCompact 
+            isCompact={false} 
             showControls 
             showShadow 
             total={10} 
@@ -76,7 +79,7 @@ export default function Home() {
             onChange={setCurrentPage}
           />
         </div>
-
+        <Button className="w-[200px]" onPress={onOpen}>Open Modal</Button>
         <ListboxWrapper>
             <Listbox
               aria-label="Actions"
@@ -98,8 +101,9 @@ export default function Home() {
           onClear={() => console.log("input cleared")}
           className="max-w-xs"
         />
-        <Button>Click me</Button>
+        <Button className="w-[200px]">Click me</Button>
       </div> 
+      <ModalSample isOpen={isOpen} onOpenChange={onOpenChange} onClose={onClose} />
     </main>
   )
 }
