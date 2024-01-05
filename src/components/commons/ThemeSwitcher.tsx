@@ -19,7 +19,7 @@ export function ThemeSwitcher() {
   return (
     <div>
       The current theme is: {theme}
-      <div className="flex gap-2">
+      <div className="flex justify-end gap-2">
         <Tooltip content="Light Mode">
             <Button isIconOnly aria-label="light" onClick={() => setTheme('light')}>
                 <HiMiniSun />

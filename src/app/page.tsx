@@ -22,7 +22,7 @@ export default function Home() {
   const columns = [...columnsOfEmployees];
   const rows = [...rowsOfEmployees];
   const [currentPage, setCurrentPage] = useState(1);
-  const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
     <main>
@@ -31,7 +31,6 @@ export default function Home() {
         <div className="flex justify-end">
           <ThemeSwitcher />
         </div>
-        Test Hello World
         <h1 className="text-xl font-medium">Lorem ipsum dolor sit amet</h1>
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Purus gravida quis blandit turpis. Augue neque gravida in fermentum et sollicitudin ac orci. Et sollicitudin ac orci phasellus egestas. Elementum tempus egestas sed sed risus pretium quam vulputate. Interdum velit euismod in pellentesque massa placerat duis ultricies.
@@ -103,7 +102,7 @@ export default function Home() {
         />
         <Button className="w-[200px]">Click me</Button>
       </div> 
-      <ModalSample isOpen={isOpen} onOpenChange={onOpenChange} onClose={onClose} />
+      <ModalSample isOpen={isOpen} onOpenChange={onOpenChange} />
     </main>
   )
 }

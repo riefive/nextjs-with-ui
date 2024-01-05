@@ -1,7 +1,9 @@
+'use client';
+
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button } from '@nextui-org/react';
 
 export const ModalSample = (
-    { isOpen, onOpenChange, onClose }: { isOpen: boolean, onOpenChange: any, onClose: any }
+    { isOpen, onOpenChange }: { isOpen: boolean, onOpenChange: any }
 ) => {
     return (
         <Modal isOpen={isOpen} onOpenChange={onOpenChange}>

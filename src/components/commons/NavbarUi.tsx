@@ -36,17 +36,17 @@ export function NavbarUi() {
             <NavbarContent className="hidden sm:flex gap-4" justify="center">
                 <NavbarItem>
                     <Link color="foreground" href="#">
-                        Features
+                        Features 1
                     </Link>
                 </NavbarItem>
                 <NavbarItem isActive>
                     <Link href="#" aria-current="page">
-                        Customers
+                        Features 2
                     </Link>
                 </NavbarItem>
                 <NavbarItem>
                     <Link color="foreground" href="#">
-                        Integrations
+                        Features 3
                     </Link>
                 </NavbarItem>
             </NavbarContent>
